@@ -1,0 +1,37 @@
+---
+import Layout from "../layouts/Layout.astro"
+import NavBar  from "../components/NavBar.astro"
+import type { IEstadoItemsNavBar } from "../interfaces/IEstadoItemsNavBar"
+// import './css/style.css';
+
+const estadosItemsNavBar: IEstadoItemsNavBar ={
+	paginaInicio      :true,
+    paginaSobreMi     :false,
+    paginaHabilidades :false,
+    paginaProyecto    :false,
+}
+---
+
+
+
+
+<Layout tituloPaguina="Home | Sobre Mi">
+
+	<NavBar slot="header" estadosItemsNavBar={estadosItemsNavBar} />
+
+	<section slot="body">
+		<h2 class="text-2xl text-center text-white mb-2">Pantalla en desarrollo no se que poner aqui 😂😂😂😂😂😂</h2>
+		<img
+		class="w-96 h-60"
+		src={"/imagenes/stikers/418-Im-a-teapot.png"}
+		alt="descriptive text"
+		/>
+	</section>
+
+
+
+</Layout>
+
+<style>
+
+</style>

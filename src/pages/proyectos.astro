@@ -1,0 +1,90 @@
+---
+import Layout from "../layouts/Layout.astro"
+import NavBar  from "../components/NavBar.astro"
+import type { IEstadoItemsNavBar } from "../interfaces/IEstadoItemsNavBar"
+import type { IAPIGitHubRespositorios } from "../interfaces/api"
+import type { Props } from "astro/components/ViewTransitions.astro"
+
+
+const estadosItemsNavBar: IEstadoItemsNavBar ={
+	paginaInicio      :false,
+    paginaSobreMi     :false,
+    paginaHabilidades :false,
+    paginaProyecto    :true,
+}
+
+async function consultarRepositorios():Promise<Array<IAPIGitHubRespositorios>>{
+	const token=import.meta.env.TOKEN_GITHUB
+	const headers= new Headers({
+        'Authorization': `Bearer ${token}`,
+        'X-GitHub-Api-Version': '2022-11-28'
+    })
+
+    const options= {
+        method: 'GET',
+        headers
+    } 
+
+    let respuesta = await fetch(`https://api.github.com/users/gabrielj2814/repos`,options)
+    let dataRespuesta:Array<IAPIGitHubRespositorios>=await respuesta.json() as Array<IAPIGitHubRespositorios>
+    // console.clear()
+	// console.log("todos los repositorios => ",dataRespuesta)
+    return dataRespuesta
+}
+
+function obtenerProyecto(proyectos:Array<IAPIGitHubRespositorios> ):Array<IAPIGitHubRespositorios>{
+    const proyectosHaMostrar:Array<string> = [
+        "laravel_mysql_docker_ejemplo",
+        "wisp",
+    ]
+
+    let proyectosFiltrado:Array<IAPIGitHubRespositorios>=[]
+
+    for(let contador=0; contador<proyectos.length;contador++){
+        if (proyectosHaMostrar.includes(proyectos[contador].name)){
+            proyectosFiltrado.push(proyectos[contador])
+        }
+    }
+    
+   
+    return proyectosFiltrado
+}
+
+let proyectos:Array<IAPIGitHubRespositorios> =await consultarRepositorios()
+proyectos=obtenerProyecto(proyectos)
+// console.clear()
+// console.log("proyectos ha mostrar => ",proyectos)
+
+---
+
+
+<Layout tituloPaguina="Home | Proyectos">
+		
+	<NavBar slot="header" estadosItemsNavBar={estadosItemsNavBar} />
+
+	<section slot="body" class="p-2">
+		<p class=" text-2xl text-white mb-4">Proyectos</p>
+        {proyectos.map(({name,html_url,description,language}) => (
+            <div class="bg-gray-600 w-full min-h-16 rounded-lg mb-2 p-2">
+                <h3 class=" text-white font-bold">{name}</h3>
+                <a href={html_url} target="_blank" class=" text-blue-500"> 
+                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon inline icon-tabler icons-tabler-outline icon-tabler-link"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 15l6 -6" /><path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464" /><path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463" /></svg>
+                    ir al repositorio
+                </a>
+                <p class=" text-white">
+                    {(description!=null)?description:"El repositorio no tiene ninguna descripción"}
+                </p>
+                <div class=" text-white">
+                    <span class=" font-bold">Lenguaje:</span> {(language!=null)?language:"Sin Lenguaje"}
+                </div>
+            </div>
+        ))
+
+        }
+    </section>
+
+</Layout>
+
+<style>
+
+</style>

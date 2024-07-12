@@ -1,0 +1,37 @@
+---
+import Layout from "../layouts/Layout.astro"
+import NavBar  from "../components/NavBar.astro"
+import type { IEstadoItemsNavBar } from "../interfaces/IEstadoItemsNavBar"
+
+const estadosItemsNavBar: IEstadoItemsNavBar ={
+	paginaInicio      :false,
+    paginaSobreMi     :true,
+    paginaHabilidades :false,
+    paginaProyecto    :false,
+}
+
+---
+
+
+<Layout tituloPaguina="Home | Sobre Mi">
+		
+	<NavBar slot="header" estadosItemsNavBar={estadosItemsNavBar} />
+
+	<section slot="body" class="p-2">
+		<h2 class="text-2xl text-white mb-2">Sobre Mi</h2>
+		<p class=" text-white mb-2">
+			Hola mucho gusto, me presento mi nombre es GaoDev soy ingeniero en informática me gusta mucho
+			la programación, mi lenguaje favorito es <span class="font-bold">JavaScript</span> pero el que me de comer es <span class="font-bold">PHP</span> 😂
+			pipipi, el anime me gusta muchísimo y mi anime favorito es <span class="font-bold">Bleach</span> también me gusta los juegos mi favorito
+			es <span class="font-bold">Devil May Cray</span> <a href="https://www.youtube.com/watch?v=Jrg9KxGNeJY">Is my Power</a>
+			y por ultimo pero no menos importante me gusta un monto las <span class="font-bold">VTUBER</span> mi favorita es Rakkun. 
+		</p>
+
+
+	</section>
+
+</Layout>
+
+<style>
+
+</style>
